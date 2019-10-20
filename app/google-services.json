@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "754038273582",
+    "firebase_url": "https://facepay-19718.firebaseio.com",
+    "project_id": "facepay-19718",
+    "storage_bucket": "facepay-19718.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754038273582:android:9495aeaef64b4ba6b751bf",
+        "android_client_info": {
+          "package_name": "com.example.facepay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "754038273582-3qq0m17ou3kdnglu25f2cu51a1dp8fc3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8XVz8tTo2PIix0vi8hTj0F_Fxk4gLsXQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "754038273582-3qq0m17ou3kdnglu25f2cu51a1dp8fc3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754038273582:android:e19d91708469e46db751bf",
+        "android_client_info": {
+          "package_name": "com.example.glide"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "754038273582-3qq0m17ou3kdnglu25f2cu51a1dp8fc3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8XVz8tTo2PIix0vi8hTj0F_Fxk4gLsXQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "754038273582-3qq0m17ou3kdnglu25f2cu51a1dp8fc3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

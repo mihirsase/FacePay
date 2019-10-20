@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Wallet">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="10">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:background="#03a9f4"
+            android:padding="10dp"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_back_black_24dp"
+                android:id="@+id/back"
+                android:layout_margin="12dp"/>
+            <androidx.cardview.widget.CardView
+                android:layout_width="180dp"
+                android:layout_height="120dp"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="26dp"
+                android:layout_marginLeft="26dp"
+                android:layout_marginRight="26dp"
+                android:id="@+id/settings"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="8dp">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="₹ "
+                        android:textSize="30dp"
+                        android:layout_toLeftOf="@+id/rs"
+                        android:layout_centerInParent="true"
+                        />
+                    <TextView
+                        android:id="@+id/rs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="40dp"
+                        android:layout_centerInParent="true"
+                        android:textStyle="bold"/>
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Balance"
+                        android:textSize="20dp"
+                        android:layout_above="@+id/rs"
+                        android:layout_centerInParent="true"
+
+                        />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7"
+            android:orientation="vertical"
+            android:padding="15dp">
+            <TextView
+                android:labelFor="@id/text_email"
+                android:text="Receiver Details"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-light"
+                android:layout_width="wrap_content"
+                android:textSize="30dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"/>
+            <TextView
+
+                android:text="Enter Mobile Number"
+                android:fontFamily="sans-serif-light"
+                android:layout_width="wrap_content"
+                android:textSize="20dp"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:id="@+id/contact"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_phone"
+                android:drawablePadding="10dp"
+                android:singleLine="true"
+                android:layout_marginBottom="20dp"
+                android:hint="9999777888"
+                android:inputType="textEmailAddress"
+                />
+            <Button
+                android:id="@+id/button_proceed"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="22dp"
+                android:background="#ff9800"
+                android:text="Proceed"
+                android:textAllCaps="false"
+                android:textColor="#fff"
+                android:textSize="18sp"/>
+            <TextView
+
+                android:text="OR"
+                android:fontFamily="sans-serif-light"
+                android:layout_width="wrap_content"
+                android:textSize="15dp"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:id="@+id/iv_transfer"
+                android:src="@drawable/ic_filter_center_focus_orange_24dp"/>
+            <TextView
+
+                android:text="Scan Code"
+                android:fontFamily="sans-serif-light"
+                android:layout_width="wrap_content"
+                android:textSize="20dp"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
