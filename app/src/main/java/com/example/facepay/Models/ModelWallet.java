@@ -1,4 +1,4 @@
-package com.example.facepay;
+package com.example.facepay.Models;
 
 public class ModelWallet {
     public String  purpose, date,time;

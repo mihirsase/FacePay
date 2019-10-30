@@ -1,4 +1,4 @@
-package com.example.facepay;
+package com.example.facepay.Home;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,13 +6,13 @@ import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 
+import com.example.facepay.Auth.GetExtraInfo;
+import com.example.facepay.Auth.Login;
+import com.example.facepay.R;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,7 +41,7 @@ public class Home extends AppCompatActivity {
         cv_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Home.this,Account.class);
+                Intent intent = new Intent(Home.this, Account.class);
 
                 startActivity(intent);
             }
@@ -50,7 +50,7 @@ public class Home extends AppCompatActivity {
         cv_shop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Home.this,Shop.class);
+                Intent intent = new Intent(Home.this, Shop.class);
                 startActivity(intent);
             }
         });
@@ -58,7 +58,7 @@ public class Home extends AppCompatActivity {
         cv_wallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Home.this,Wallet.class);
+                Intent intent = new Intent(Home.this, Wallet.class);
                 startActivity(intent);
             }
         });
@@ -66,7 +66,7 @@ public class Home extends AppCompatActivity {
         cv_transfer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Home.this,Transfer.class);
+                Intent intent = new Intent(Home.this, Transfer.class);
                 startActivity(intent);
             }
         });

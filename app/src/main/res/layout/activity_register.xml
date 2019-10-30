@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#03a9f4"
     android:orientation="vertical"
-    tools:context=".Register"
+    tools:context=".Auth.Register"
     android:scrollbarAlwaysDrawVerticalTrack="true">
 
     <RelativeLayout

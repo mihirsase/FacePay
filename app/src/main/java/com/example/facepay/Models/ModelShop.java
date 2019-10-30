@@ -1,4 +1,4 @@
-package com.example.facepay;
+package com.example.facepay.Models;
 
 public class ModelShop {
     public String  product, weight,id;

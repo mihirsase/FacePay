@@ -11,19 +11,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Transfer"></activity>
-        <activity android:name=".Shop" />
-        <activity android:name=".Wallet" />
-        <activity android:name=".Account" />
-        <activity android:name=".Home" />
-        <activity android:name=".GetExtraInfo" />
-        <activity android:name=".Register" />
-        <activity android:name=".Login" />
+        <activity android:name=".Home.Transfer"></activity>
+        <activity android:name=".Home.Shop" />
+        <activity android:name=".Home.Wallet" />
+        <activity android:name=".Home.Account" />
+        <activity android:name=".Home.Home" />
+        <activity android:name=".Auth.GetExtraInfo" />
+        <activity android:name=".Auth.Register" />
+        <activity android:name=".Auth.Login" />
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
             tools:replace="screenOrientation" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".Auth.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,7 +41,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <service android:name=".MyFirebaseMessagingService">
+        <service android:name=".utls.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

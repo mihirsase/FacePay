@@ -1,4 +1,4 @@
-package com.example.facepay;
+package com.example.facepay.Auth;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,7 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
-import android.widget.TextView;
+
+import com.example.facepay.R;
 
 public class MainActivity extends AppCompatActivity {
     private final int SPLASH_DISPLAY_LENGTH = 3000;
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 /* Create an Intent that will start the Menu-Activity. */
-                Intent mainIntent = new Intent(MainActivity.this,Login.class);
+                Intent mainIntent = new Intent(MainActivity.this, Login.class);
                 startActivity(mainIntent);
                 finish();
             }
