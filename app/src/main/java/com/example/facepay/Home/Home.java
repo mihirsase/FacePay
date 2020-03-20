@@ -70,6 +70,13 @@ public class Home extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        cv_history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Home.this, History.class);
+                startActivity(intent);
+            }
+        });
 
         cv_logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +86,7 @@ public class Home extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
 
 
     }

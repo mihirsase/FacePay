@@ -220,6 +220,8 @@ public class Wallet extends AppCompatActivity {
                     holder.setPurpose("Money Sent");
                 }else if(model.getPurpose().equals("TransferMoneyReceive")){
                     holder.setPurpose("Money Received");
+                }else if(model.getPurpose().equals("CartDebit")){
+                    holder.setPurpose("Cart Debit");
                 }
 
                 holder.setDate(model.getDate());
@@ -234,11 +236,6 @@ public class Wallet extends AppCompatActivity {
 
         recyclerView.setAdapter(adapter);
     }
-
-
-
-
-
 
 
 
@@ -272,6 +269,9 @@ public class Wallet extends AppCompatActivity {
             }else if(Purpose.equals("TransferMoneyReceive")){
                 amount.setText("+ ₹"+string);
                 amount.setTextColor(Color.parseColor("#00c853"));
+            }else if(Purpose.equals("CartDebit")){
+                amount.setText("- ₹"+string);
+                amount.setTextColor(Color.parseColor("#f44336"));
             }
 
         }

@@ -24,7 +24,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_back_black_24dp"
+                android:src="@drawable/ic_arrow_back_white_24dp"
                 android:id="@+id/back"
                 android:layout_margin="12dp"/>
             <TextView

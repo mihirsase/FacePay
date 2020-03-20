@@ -183,7 +183,8 @@ public class Shop extends AppCompatActivity {
                             dref.child("UserCart").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(modelShop.getId()).removeValue();
                         }else {
 
-                            dref.child("UserCart").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(modelShop.getId()).child("Quantity").setValue(newValue);
+                            dref.child("UserCart").child(FirebaseAuth.getInstance().getCurrentUser()
+                                    .getUid()).child(modelShop.getId()).child("Quantity").setValue(newValue);
                         }
                     }
                 });
