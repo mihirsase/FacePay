@@ -1,23 +1,20 @@
 package com.example.facepay.Auth;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -27,12 +24,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.exifinterface.media.ExifInterface;
 
 import com.example.facepay.Home.Home;
 import com.example.facepay.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -41,6 +45,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -54,22 +60,30 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GetExtraInfo extends AppCompatActivity {
-    private TextView tv_email,tv_notVerified;
-    private Button save;
-    private EditText name,mobile;
-    private ImageView face,dummy;
-    private ProgressBar progressBar;
     FirebaseAuth auth;
-    private StorageReference mStorageRef;
     Bitmap bitmap;
-    private boolean flag=false;
-    private File file=null;
     String mCurrentPhotoPath;
-    FirebaseDatabase database ;
+    FirebaseDatabase database;
     DatabaseReference dbRef;
     Map<String, Object> childUpdates;
-    int myflag=0;
-    String username,contact;
+    int myflag = 0;
+    String username, contact;
+    private TextView tv_email, tv_notVerified;
+    private Button save;
+    private EditText name, mobile;
+    private ImageView face, dummy;
+    private ProgressBar progressBar;
+    private StorageReference mStorageRef;
+    private boolean flag = false;
+    private File file = null;
+    private static final String TAG = "GetExtraInfo";
+
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,22 +92,20 @@ public class GetExtraInfo extends AppCompatActivity {
         setContentView(R.layout.activity_get_extra_info);
 
 
-
-
         tv_email = findViewById(R.id.text_email);
-        tv_notVerified=findViewById(R.id.text_not_verified);
+        tv_notVerified = findViewById(R.id.text_not_verified);
         name = findViewById(R.id.edit_text_name);
         mobile = findViewById(R.id.text_phone);
         save = findViewById(R.id.button_save);
         face = findViewById(R.id.face);
         dummy = findViewById(R.id.dummy);
         auth = FirebaseAuth.getInstance();
-        progressBar =findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBar);
         FirebaseUser currentUser = auth.getCurrentUser();
         mStorageRef = FirebaseStorage.getInstance().getReference();
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference();
-        dbRef = database.getReference("/Users/"+FirebaseAuth.getInstance().getCurrentUser().getUid());
+        dbRef = database.getReference("/Users/" + FirebaseAuth.getInstance().getCurrentUser().getUid());
         tv_email.setText(currentUser.getEmail());
         childUpdates = new HashMap<>();
 
@@ -102,16 +114,15 @@ public class GetExtraInfo extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(checkCameraPermission()) {
+                if (checkCameraPermission()) {
 
                     dispatchTakePictureIntent();
 
-                }else{
+                } else {
                     requestCameraPermission();
                 }
             }
         });
-
 
 
         save.setOnClickListener(new View.OnClickListener() {
@@ -119,13 +130,13 @@ public class GetExtraInfo extends AppCompatActivity {
             public void onClick(View view) {
                 username = name.getText().toString();
                 contact = mobile.getText().toString();
-                myflag=0;
-                if(username.isEmpty()){
+                myflag = 0;
+                if (username.isEmpty()) {
                     name.setError("Name Required");
                     name.requestFocus();
                     return;
                 }
-                if(contact.isEmpty() || contact.length()!=10){
+                if (contact.isEmpty() || contact.length() != 10) {
                     mobile.setError("Valid Mobile Number Required");
                     mobile.requestFocus();
                     return;
@@ -137,23 +148,42 @@ public class GetExtraInfo extends AppCompatActivity {
                 searchQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()){
+                        if (dataSnapshot.exists()) {
                             mobile.setError("Mobile Number Is Previously Used");
                             mobile.requestFocus();
-                        }else{
+                        } else {
                             //new contact add details and image to database
-                            if(bitmap==null){
+                            if (bitmap == null) {
                                 tv_notVerified.setVisibility(View.VISIBLE);
 
-                            }else {
+                            } else {
                                 tv_notVerified.setVisibility(View.INVISIBLE);
 
                                 progressBar.setVisibility(View.VISIBLE);
 
-                                childUpdates.put("Name", username);
-                                childUpdates.put("Contact", contact);
-                                childUpdates.put("Balance", 0);
-                                saveImageToFirebase(bitmap, childUpdates, dbRef);
+                                FirebaseInstanceId.getInstance().getInstanceId()
+                                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                                if (!task.isSuccessful()) {
+                                                    Log.w(TAG, "getInstanceId failed", task.getException());
+                                                    return;
+                                                }
+
+                                                // Get new Instance ID token
+                                                if (task.getResult() != null) {
+                                                    String token = task.getResult().getToken();
+                                                    childUpdates.put("Name", username);
+                                                    childUpdates.put("Contact", contact);
+                                                    childUpdates.put("Balance", 0);
+                                                    childUpdates.put("Token", token);
+                                                    saveImageToFirebase(bitmap, childUpdates, dbRef);
+                                                }
+
+                                            }
+                                        });
+
+
                             }
                         }
                     }
@@ -165,22 +195,11 @@ public class GetExtraInfo extends AppCompatActivity {
                 });
 
 
-
-
-
-
-
-
-
-
             }
         });
 
 
-
-
     }
-
 
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -229,14 +248,14 @@ public class GetExtraInfo extends AppCompatActivity {
                 case 7: {
                     if (resultCode == RESULT_OK) {
                         File file = new File(mCurrentPhotoPath);
-                        bitmap = MediaStore.Images.Media
-                                .getBitmap(getApplicationContext().getContentResolver(), Uri.fromFile(file));
-
+//                        bitmap = MediaStore.Images.Media
+//                                .getBitmap(getApplicationContext().getContentResolver(), Uri.fromFile(file));
+                        bitmap = handleImageOrientation();
                         if (bitmap != null) {
                             tv_notVerified.setVisibility(View.VISIBLE);
                             tv_notVerified.setText("Face Captured");
                             tv_notVerified.setTextColor(Color.GREEN);
-                        }else{
+                        } else {
                             tv_notVerified.setVisibility(View.VISIBLE);
                             return;
                         }
@@ -250,13 +269,51 @@ public class GetExtraInfo extends AppCompatActivity {
         }
     }
 
+    private Bitmap handleImageOrientation() {
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
+        Bitmap rotatedBitmap = null;
+        try {
+            ExifInterface ei = new ExifInterface(mCurrentPhotoPath);
+            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    rotatedBitmap = rotateImage(bitmap, 90);
+                    break;
+
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    rotatedBitmap = rotateImage(bitmap, 180);
+                    break;
+
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    rotatedBitmap = rotateImage(bitmap, 270);
+                    break;
+
+                case ExifInterface.ORIENTATION_NORMAL:
+                default:
+                    rotatedBitmap = bitmap;
+            }
+//            if (rotatedBitmap != bitmap) {
+//                FileOutputStream fOut = new FileOutputStream(mCurrentPhotoPath);
+//                rotatedBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+//                fOut.flush();
+//                fOut.close();
+//            }
+//            bitmap.recycle();
+//            rotatedBitmap.recycle();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return rotatedBitmap;
+    }
+
     private void saveImageToFirebase(Bitmap bitmap, final Map<String, Object> childUpdates, final DatabaseReference dbRef) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final StorageReference storageReference = mStorageRef
-                .child("images/"+FirebaseAuth.getInstance().getCurrentUser().getUid());
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
-        byte[] image=baos.toByteArray();
-        UploadTask uploadTask= storageReference.putBytes(image);
+                .child("images/" + FirebaseAuth.getInstance().getCurrentUser().getUid());
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] image = baos.toByteArray();
+        UploadTask uploadTask = storageReference.putBytes(image);
         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -272,26 +329,6 @@ public class GetExtraInfo extends AppCompatActivity {
             }
         });
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     @Override
@@ -331,6 +368,7 @@ public class GetExtraInfo extends AppCompatActivity {
         }
         return true;
     }
+
     private void requestCameraPermission() {
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.CAMERA},
